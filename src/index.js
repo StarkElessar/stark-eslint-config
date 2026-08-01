@@ -19,11 +19,11 @@ export const base = [
 		languageOptions: {
 			parserOptions: {
 				ecmaFeatures: {
-					jsx: true,
-				},
-			},
-		},
-	},
+					jsx: true
+				}
+			}
+		}
+	}
 ];
 
 /**
@@ -37,7 +37,7 @@ export const typescript = tseslint.configs.recommended.map((config, index) => ({
 	name: config.name
 		? `@stark/eslint-config/${config.name}`
 		: `@stark/eslint-config/typescript-${index}`,
-	files: TYPESCRIPT_FILES,
+	files: TYPESCRIPT_FILES
 }));
 
 /**
@@ -50,29 +50,117 @@ export const stylistic = [
 		name: '@stark/eslint-config/stylistic',
 		files: SOURCE_FILES,
 		plugins: {
-			'@stylistic': stylisticPlugin,
+			'@stylistic': stylisticPlugin
 		},
 		rules: {
-			'@stylistic/brace-style': ['error', 'stroustrup', {
-				allowSingleLine: false,
+			'curly': ['error', 'all'],
+			'@stylistic/array-bracket-spacing': ['error', 'never'],
+			'@stylistic/arrow-parens': ['error', 'always'],
+			'@stylistic/arrow-spacing': ['error', {
+				before: true,
+				after: true
 			}],
+			'@stylistic/brace-style': ['error', 'stroustrup', {
+				allowSingleLine: false
+			}],
+			'@stylistic/comma-dangle': ['error', 'never'],
+			'@stylistic/comma-spacing': ['error', {
+				before: false,
+				after: true
+			}],
+			'@stylistic/computed-property-spacing': ['error', 'never'],
+			'@stylistic/eol-last': ['error', 'always'],
 			'@stylistic/indent': ['error', 'tab', {
-				SwitchCase: 1,
+				SwitchCase: 1
 			}],
 			'@stylistic/jsx-quotes': ['error', 'prefer-single'],
+			'@stylistic/jsx-closing-bracket-location': ['error', 'line-aligned'],
+			'@stylistic/jsx-first-prop-new-line': ['error', 'multiline'],
 			'@stylistic/jsx-indent-props': ['error', 'tab'],
+			'@stylistic/jsx-max-props-per-line': ['error', {
+				maximum: 1,
+				when: 'multiline'
+			}],
+			'@stylistic/jsx-tag-spacing': ['error', {
+				beforeSelfClosing: 'never',
+				afterOpening: 'never',
+				beforeClosing: 'never'
+			}],
+			'@stylistic/jsx-wrap-multilines': ['error', {
+				declaration: 'parens-new-line',
+				assignment: 'parens-new-line',
+				return: 'parens-new-line',
+				arrow: 'parens-new-line',
+				condition: 'parens-new-line',
+				logical: 'parens-new-line',
+				prop: 'parens-new-line'
+			}],
+			'@stylistic/keyword-spacing': ['error', {
+				before: true,
+				after: true
+			}],
 			'@stylistic/max-len': ['error', {
 				code: 140,
 				comments: 140,
-				tabWidth: 4,
+				tabWidth: 4
 			}],
+			'@stylistic/member-delimiter-style': ['error', {
+				multiline: {
+					delimiter: 'semi',
+					requireLast: true
+				},
+				singleline: {
+					delimiter: 'semi',
+					requireLast: false
+				}
+			}],
+			'@stylistic/no-extra-semi': 'error',
+			'@stylistic/no-multiple-empty-lines': ['error', {
+				max: 1,
+				maxBOF: 0,
+				maxEOF: 1
+			}],
+			'@stylistic/no-multi-spaces': 'error',
 			'@stylistic/no-trailing-spaces': 'error',
+			'@stylistic/object-curly-newline': ['error', {
+				ImportDeclaration: {
+					multiline: true,
+					consistent: true
+				},
+				ExportDeclaration: {
+					multiline: true,
+					consistent: true
+				},
+				ObjectExpression: {
+					multiline: true,
+					consistent: true
+				},
+				ObjectPattern: {
+					multiline: true,
+					consistent: true
+				}
+			}],
+			'@stylistic/object-curly-spacing': ['error', 'always'],
+			'@stylistic/padded-blocks': ['error', 'never'],
 			'@stylistic/quotes': ['error', 'single', {
-				avoidEscape: true,
+				avoidEscape: true
 			}],
 			'@stylistic/semi': ['error', 'always'],
-		},
-	},
+			'@stylistic/semi-spacing': ['error', {
+				before: false,
+				after: true
+			}],
+			'@stylistic/space-before-blocks': ['error', 'always'],
+			'@stylistic/space-before-function-paren': ['error', {
+				anonymous: 'always',
+				named: 'never',
+				asyncArrow: 'always'
+			}],
+			'@stylistic/space-in-parens': ['error', 'never'],
+			'@stylistic/space-infix-ops': 'error',
+			'@stylistic/type-annotation-spacing': 'error'
+		}
+	}
 ];
 
 /**
@@ -84,7 +172,7 @@ export const stylistic = [
 export const recommended = [
 	...base,
 	...typescript,
-	...stylistic,
+	...stylistic
 ];
 
 export default recommended;

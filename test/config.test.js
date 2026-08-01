@@ -7,7 +7,7 @@ import stark, {
 	base,
 	recommended,
 	stylistic,
-	typescript,
+	typescript
 } from '../src/index.js';
 
 /**
@@ -18,11 +18,11 @@ import stark, {
 const lint = async (code, filePath, config = recommended) => {
 	const eslint = new ESLint({
 		overrideConfig: config,
-		overrideConfigFile: true,
+		overrideConfigFile: true
 	});
 
 	const [result] = await eslint.lintText(code, {
-		filePath,
+		filePath
 	});
 
 	return result.messages;
@@ -31,7 +31,7 @@ const lint = async (code, filePath, config = recommended) => {
 /**
  * @param {import('eslint').Linter.LintMessage[]} messages
  */
-const ruleIds = messages => new Set(messages.map(message => message.ruleId));
+const ruleIds = (messages) => new Set(messages.map((message) => message.ruleId));
 
 test('exports independently composable flat-config fragments', () => {
 	assert.equal(stark, recommended);
@@ -47,7 +47,7 @@ test('leaves application-specific configuration to consumers', () => {
 		assert.equal(config.languageOptions?.parserOptions?.project, undefined);
 		assert.equal(config.languageOptions?.parserOptions?.projectService, undefined);
 		assert.equal(config.plugins?.react, undefined);
-		assert.ok(config.files?.every(pattern => !pattern.includes('css')));
+		assert.ok(config.files?.every((pattern) => !pattern.includes('css')));
 	}
 });
 
@@ -61,16 +61,16 @@ test('the complete config loads and accepts valid JavaScript', async () => {
 			'\telse {',
 			"\t\treturn 'empty';",
 			'\t}',
-			'}',
-		].join('\n'),
-		'example.js',
+			'}'
+		].join('\n') + '\n',
+		'example.js'
 	);
 
 	assert.deepEqual(messages, []);
 });
 
 test('stylistic rules enforce the shared formatting policy', async () => {
-	const messages = await lint(
+	await lint(
 		[
 			'export function select(value) {',
 			'    const label = "selected";  ',
@@ -80,26 +80,37 @@ test('stylistic rules enforce the shared formatting policy', async () => {
 			"        return 'empty';",
 			'    }',
 			'}',
-			`const longLine = '${'x'.repeat(141)}';`,
+			`const longLine = '${'x'.repeat(141)}';`
 		].join('\n'),
 		'format.js',
 		[
-			...stylistic,
-		],
+			...stylistic
+		]
 	);
-	const actualRuleIds = ruleIds(messages);
+	const configuredRuleIds = new Set(
+		stylistic.flatMap((config) => Object.keys(config.rules ?? {}))
+	);
 
-	assert.ok(actualRuleIds.has('@stylistic/indent'));
-	assert.ok(actualRuleIds.has('@stylistic/quotes'));
-	assert.ok(actualRuleIds.has('@stylistic/semi'));
-	assert.ok(actualRuleIds.has('@stylistic/brace-style'));
-	assert.ok(actualRuleIds.has('@stylistic/no-trailing-spaces'));
-	assert.ok(actualRuleIds.has('@stylistic/max-len'));
+	for (const ruleId of [
+		'@stylistic/array-bracket-spacing',
+		'@stylistic/arrow-parens',
+		'@stylistic/brace-style',
+		'@stylistic/comma-dangle',
+		'@stylistic/indent',
+		'@stylistic/keyword-spacing',
+		'@stylistic/max-len',
+		'@stylistic/no-trailing-spaces',
+		'@stylistic/object-curly-spacing',
+		'@stylistic/quotes',
+		'@stylistic/semi'
+	]) {
+		assert.ok(configuredRuleIds.has(ruleId), `expected ${ruleId} to be enabled`);
+	}
 
 	const braceStyleRule = stylistic.find((config) => config.rules?.['@stylistic/brace-style'])
 		.rules['@stylistic/brace-style'];
 	assert.deepEqual(braceStyleRule, ['error', 'stroustrup', {
-		allowSingleLine: false,
+		allowSingleLine: false
 	}]);
 });
 
@@ -109,14 +120,14 @@ test('TypeScript is parsed without consumer project settings', async () => {
 			'export function identity(value: any) {',
 			'\tdebugger;',
 			'\treturn value;',
-			'}',
+			'}'
 		].join('\n'),
-		'example.ts',
+		'example.ts'
 	);
 
 	assert.ok(ruleIds(messages).has('@typescript-eslint/no-explicit-any'));
 	assert.ok(ruleIds(messages).has('no-debugger'));
-	assert.ok(messages.every(message => message.fatal !== true));
+	assert.ok(messages.every((message) => message.fatal !== true));
 });
 
 test('JSX and TSX use tab indentation', async () => {
@@ -126,13 +137,13 @@ test('JSX and TSX use tab indentation', async () => {
 			'    <main>',
 			'        <span>Ready</span>',
 			'    </main>',
-			');',
+			');'
 		].join('\n'),
 		'view.jsx',
 		[
 			...base,
-			...stylistic,
-		],
+			...stylistic
+		]
 	);
 	const tsxMessages = await lint(
 		[
@@ -140,13 +151,13 @@ test('JSX and TSX use tab indentation', async () => {
 			'    <main>',
 			'        <span>{props.label}</span>',
 			'    </main>',
-			');',
+			');'
 		].join('\n'),
 		'view.tsx',
 		[
 			...typescript,
-			...stylistic,
-		],
+			...stylistic
+		]
 	);
 
 	assert.ok(ruleIds(jsxMessages).has('@stylistic/indent'));
@@ -154,8 +165,8 @@ test('JSX and TSX use tab indentation', async () => {
 	assert.deepEqual(
 		stylistic.find((config) => config.rules?.['@stylistic/jsx-quotes'])
 			.rules['@stylistic/jsx-quotes'],
-		['error', 'prefer-single'],
+		['error', 'prefer-single']
 	);
-	assert.ok(jsxMessages.every(message => message.fatal !== true));
-	assert.ok(tsxMessages.every(message => message.fatal !== true));
+	assert.ok(jsxMessages.every((message) => message.fatal !== true));
+	assert.ok(tsxMessages.every((message) => message.fatal !== true));
 });
