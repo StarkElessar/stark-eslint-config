@@ -49,6 +49,7 @@ itself:
 // eslint.config.js
 import {
 	base,
+	imports,
 	stylistic,
 	typeChecked,
 	typescript,
@@ -58,6 +59,7 @@ export default [
 	...base,
 	...typescript,
 	...stylistic,
+	...imports,
 	...typeChecked,
 ];
 ```
@@ -67,7 +69,9 @@ export default [
 and TSX. `stylistic` applies the shared formatting policy to all four language
 families. `typeChecked` contains the shared type-aware TypeScript policy and
 must be applied after the consumer configures `projectService` or a project
-path. Keep this order so the TypeScript fragment can disable core rules that
+path. `imports` applies shared import/export ordering and recognizes
+alias-independent `shared`, `entities`, `features`, `widgets`, and `pages|views`
+layers. Keep this order so the TypeScript fragment can disable core rules that
 its TypeScript-aware equivalents replace.
 
 Applications that enable their own type-aware rules also configure the parser

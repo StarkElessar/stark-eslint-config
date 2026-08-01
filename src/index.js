@@ -1,5 +1,6 @@
 import js from '@eslint/js';
 import stylisticPlugin from '@stylistic/eslint-plugin';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import tseslint from 'typescript-eslint';
 
 const JAVASCRIPT_FILES = ['**/*.{js,mjs,cjs,jsx}'];
@@ -226,6 +227,41 @@ export const stylistic = [
 ];
 
 /**
+ * Shared import ordering for TypeScript and TSX. FSD layer groups support
+ * conventional alias prefixes without binding the package to one alias.
+ *
+ * @type {import('eslint').Linter.Config[]}
+ */
+export const imports = [
+	{
+		name: '@stark/eslint-config/imports',
+		files: TYPESCRIPT_FILES,
+		plugins: {
+			'simple-import-sort': simpleImportSort
+		},
+		rules: {
+			'simple-import-sort/imports': ['error', {
+				groups: [
+					['^.+\\.s?css(\\?.*)?$'],
+					['^\\u0000'],
+					['^node:'],
+					['^(?:~|@|#)/(?:shared)(?:/|$)'],
+					['^(?:~|@|#)/(?:entities)(?:/|$)'],
+					['^(?:~|@|#)/(?:features)(?:/|$)'],
+					['^(?:~|@|#)/(?:widgets)(?:/|$)'],
+					['^(?:~|@|#)/(?:pages|views)(?:/|$)'],
+					['^(?:~|@|#)/'],
+					['^@?\\w'],
+					['^\\.\\.(?!/?$)', '^\\.\\./?$'],
+					['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$']
+				]
+			}],
+			'simple-import-sort/exports': 'error'
+		}
+	}
+];
+
+/**
  * Convenient complete preset. Individual fragments remain independently
  * composable and can be omitted or extended by consumers.
  *
@@ -234,7 +270,8 @@ export const stylistic = [
 export const recommended = [
 	...base,
 	...typescript,
-	...stylistic
+	...stylistic,
+	...imports
 ];
 
 export default recommended;

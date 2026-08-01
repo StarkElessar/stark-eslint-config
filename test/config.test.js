@@ -5,6 +5,7 @@ import { ESLint } from 'eslint';
 
 import stark, {
 	base,
+	imports,
 	recommended,
 	stylistic,
 	typeChecked,
@@ -37,6 +38,7 @@ const ruleIds = (messages) => new Set(messages.map((message) => message.ruleId))
 test('exports independently composable flat-config fragments', () => {
 	assert.equal(stark, recommended);
 	assert.ok(base.length > 0);
+	assert.ok(imports.length > 0);
 	assert.ok(typescript.length > 0);
 	assert.ok(stylistic.length > 0);
 	assert.ok(typeChecked.length > 0);
@@ -62,6 +64,20 @@ test('base policy is shared with consumers', () => {
 	assert.equal(rules['no-negated-condition'], 'error');
 	assert.equal(rules['no-var'], 'error');
 	assert.equal(rules['prefer-const'], 'error');
+});
+
+test('import ordering uses alias-independent FSD layer groups', () => {
+	const rules = imports[0].rules['simple-import-sort/imports'];
+	const groups = rules[1].groups;
+
+	assert.equal(rules[0], 'error');
+	assert.ok(groups.some((group) => group.some((pattern) => pattern.includes('shared'))));
+	assert.ok(groups.some((group) => group.some((pattern) => pattern.includes('entities'))));
+	assert.ok(groups.some((group) => group.some((pattern) => pattern.includes('features'))));
+	assert.ok(groups.some((group) => group.some((pattern) => pattern.includes('widgets'))));
+	assert.ok(groups.some((group) => group.some((pattern) => pattern.includes('pages|views'))));
+	assert.ok(groups.every((group) => group.every((pattern) => !pattern.includes('@scripts'))));
+	assert.equal(imports[0].rules['simple-import-sort/exports'], 'error');
 });
 
 test('the complete config loads and accepts valid JavaScript', async () => {
