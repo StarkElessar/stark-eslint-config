@@ -130,6 +130,25 @@ test('TypeScript is parsed without consumer project settings', async () => {
 	assert.ok(messages.every((message) => message.fatal !== true));
 });
 
+test('TypeScript policy is shared with consumers', () => {
+	const rules = Object.assign({}, ...typescript.map((config) => config.rules ?? {}));
+
+	assert.deepEqual(rules['@typescript-eslint/consistent-type-imports'], ['error', {
+		prefer: 'type-imports',
+		fixStyle: 'separate-type-imports'
+	}]);
+	assert.equal(rules['@typescript-eslint/no-explicit-any'], 'error');
+	assert.deepEqual(rules['@typescript-eslint/no-unused-expressions'], ['error', {
+		allowTernary: true,
+		allowShortCircuit: true
+	}]);
+	assert.deepEqual(rules['@typescript-eslint/no-unused-vars'], ['error', {
+		argsIgnorePattern: '^_',
+		varsIgnorePattern: '^_',
+		caughtErrorsIgnorePattern: '^_'
+	}]);
+});
+
 test('JSX and TSX use tab indentation', async () => {
 	const jsxMessages = await lint(
 		[

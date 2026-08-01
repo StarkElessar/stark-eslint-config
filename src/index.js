@@ -32,13 +32,35 @@ export const base = [
  *
  * @type {import('eslint').Linter.Config[]}
  */
-export const typescript = tseslint.configs.recommended.map((config, index) => ({
-	...config,
-	name: config.name
-		? `@stark/eslint-config/${config.name}`
-		: `@stark/eslint-config/typescript-${index}`,
-	files: TYPESCRIPT_FILES
-}));
+export const typescript = [
+	...tseslint.configs.recommended.map((config, index) => ({
+		...config,
+		name: config.name
+			? `@stark/eslint-config/${config.name}`
+			: `@stark/eslint-config/typescript-${index}`,
+		files: TYPESCRIPT_FILES
+	})),
+	{
+		name: '@stark/eslint-config/typescript-policy',
+		files: TYPESCRIPT_FILES,
+		rules: {
+			'@typescript-eslint/consistent-type-imports': ['error', {
+				prefer: 'type-imports',
+				fixStyle: 'separate-type-imports'
+			}],
+			'@typescript-eslint/no-explicit-any': 'error',
+			'@typescript-eslint/no-unused-expressions': ['error', {
+				allowTernary: true,
+				allowShortCircuit: true
+			}],
+			'@typescript-eslint/no-unused-vars': ['error', {
+				argsIgnorePattern: '^_',
+				varsIgnorePattern: '^_',
+				caughtErrorsIgnorePattern: '^_'
+			}]
+		}
+	}
+];
 
 /**
  * Shared formatting policy for JavaScript, TypeScript, JSX, and TSX.
