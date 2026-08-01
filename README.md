@@ -50,6 +50,7 @@ itself:
 import {
 	base,
 	stylistic,
+	typeChecked,
 	typescript,
 } from '@stark/eslint-config';
 
@@ -57,14 +58,17 @@ export default [
 	...base,
 	...typescript,
 	...stylistic,
+	...typeChecked,
 ];
 ```
 
 `base` enables the ESLint-recommended rules for all four language families.
 `typescript` adds the syntax-only `typescript-eslint` recommended rules for TS
 and TSX. `stylistic` applies the shared formatting policy to all four language
-families. Keep this order so the TypeScript fragment can disable core rules
-that its TypeScript-aware equivalents replace.
+families. `typeChecked` contains the shared type-aware TypeScript policy and
+must be applied after the consumer configures `projectService` or a project
+path. Keep this order so the TypeScript fragment can disable core rules that
+its TypeScript-aware equivalents replace.
 
 Applications that enable their own type-aware rules also configure the parser
 in their own repository, where the tsconfig location is known:

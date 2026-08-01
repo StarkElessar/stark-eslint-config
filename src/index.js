@@ -75,6 +75,34 @@ export const typescript = [
 ];
 
 /**
+ * Type-aware TypeScript policy rules. Consumers must configure the parser's
+ * project service or project path before applying this fragment.
+ *
+ * @type {import('eslint').Linter.Config[]}
+ */
+export const typeChecked = [
+	{
+		name: '@stark/eslint-config/typescript-type-checked-policy',
+		files: TYPESCRIPT_FILES,
+		rules: {
+			'@typescript-eslint/no-non-null-assertion': 'warn',
+			'@typescript-eslint/unified-signatures': 'warn',
+			'@typescript-eslint/no-invalid-void-type': 'off',
+			'@typescript-eslint/no-extraneous-class': 'off',
+			'@typescript-eslint/no-dynamic-delete': 'warn',
+			'@typescript-eslint/no-useless-constructor': 'warn',
+			'@typescript-eslint/no-redundant-type-constituents': 'error',
+			'@typescript-eslint/no-unnecessary-type-arguments': 'error',
+			'@typescript-eslint/no-unnecessary-condition': 'error',
+			'@typescript-eslint/no-for-in-array': 'error',
+			'@typescript-eslint/no-base-to-string': 'error',
+			'@typescript-eslint/use-unknown-in-catch-callback-variable': 'error',
+			'@typescript-eslint/no-deprecated': 'warn'
+		}
+	}
+];
+
+/**
  * Shared formatting policy for JavaScript, TypeScript, JSX, and TSX.
  *
  * @type {import('eslint').Linter.Config[]}

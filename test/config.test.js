@@ -7,6 +7,7 @@ import stark, {
 	base,
 	recommended,
 	stylistic,
+	typeChecked,
 	typescript
 } from '../src/index.js';
 
@@ -38,6 +39,7 @@ test('exports independently composable flat-config fragments', () => {
 	assert.ok(base.length > 0);
 	assert.ok(typescript.length > 0);
 	assert.ok(stylistic.length > 0);
+	assert.ok(typeChecked.length > 0);
 });
 
 test('leaves application-specific configuration to consumers', () => {
@@ -158,6 +160,25 @@ test('TypeScript policy is shared with consumers', () => {
 		varsIgnorePattern: '^_',
 		caughtErrorsIgnorePattern: '^_'
 	}]);
+});
+
+test('type-aware policy is separately composable', () => {
+	const rules = Object.assign({}, ...typeChecked.map((config) => config.rules ?? {}));
+
+	assert.equal(rules['@typescript-eslint/no-non-null-assertion'], 'warn');
+	assert.equal(rules['@typescript-eslint/unified-signatures'], 'warn');
+	assert.equal(rules['@typescript-eslint/no-invalid-void-type'], 'off');
+	assert.equal(rules['@typescript-eslint/no-extraneous-class'], 'off');
+	assert.equal(rules['@typescript-eslint/no-dynamic-delete'], 'warn');
+	assert.equal(rules['@typescript-eslint/no-useless-constructor'], 'warn');
+	assert.equal(rules['@typescript-eslint/no-redundant-type-constituents'], 'error');
+	assert.equal(rules['@typescript-eslint/no-unnecessary-type-arguments'], 'error');
+	assert.equal(rules['@typescript-eslint/no-unnecessary-condition'], 'error');
+	assert.equal(rules['@typescript-eslint/no-for-in-array'], 'error');
+	assert.equal(rules['@typescript-eslint/no-base-to-string'], 'error');
+	assert.equal(rules['@typescript-eslint/use-unknown-in-catch-callback-variable'], 'error');
+	assert.equal(rules['@typescript-eslint/no-deprecated'], 'warn');
+	assert.ok(typeChecked.every((config) => config.languageOptions?.parserOptions?.projectService === undefined));
 });
 
 test('JSX and TSX use tab indentation', async () => {
