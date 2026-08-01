@@ -59,6 +59,7 @@ export const stylistic = [
 			'@stylistic/indent': ['error', 'tab', {
 				SwitchCase: 1,
 			}],
+			'@stylistic/jsx-quotes': ['error', 'prefer-single'],
 			'@stylistic/jsx-indent-props': ['error', 'tab'],
 			'@stylistic/max-len': ['error', {
 				code: 140,

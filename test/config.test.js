@@ -151,6 +151,11 @@ test('JSX and TSX use tab indentation', async () => {
 
 	assert.ok(ruleIds(jsxMessages).has('@stylistic/indent'));
 	assert.ok(ruleIds(tsxMessages).has('@stylistic/indent'));
+	assert.deepEqual(
+		stylistic.find((config) => config.rules?.['@stylistic/jsx-quotes'])
+			.rules['@stylistic/jsx-quotes'],
+		['error', 'prefer-single'],
+	);
 	assert.ok(jsxMessages.every(message => message.fatal !== true));
 	assert.ok(tsxMessages.every(message => message.fatal !== true));
 });
