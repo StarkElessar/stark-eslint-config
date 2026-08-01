@@ -82,6 +82,13 @@ export const typescript = [
  * @type {import('eslint').Linter.Config[]}
  */
 export const typeChecked = [
+	...tseslint.configs.strictTypeChecked.map((config, index) => ({
+		...config,
+		name: config.name
+			? `@stark/eslint-config/${config.name}`
+			: `@stark/eslint-config/type-checked-${index}`,
+		files: TYPESCRIPT_FILES
+	})),
 	{
 		name: '@stark/eslint-config/typescript-type-checked-policy',
 		files: TYPESCRIPT_FILES,
