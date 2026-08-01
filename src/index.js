@@ -53,7 +53,9 @@ export const stylistic = [
 			'@stylistic': stylisticPlugin,
 		},
 		rules: {
-			'@stylistic/brace-style': ['error', 'stroustrup'],
+			'@stylistic/brace-style': ['error', 'stroustrup', {
+				allowSingleLine: false,
+			}],
 			'@stylistic/indent': ['error', 'tab', {
 				SwitchCase: 1,
 			}],

@@ -95,6 +95,12 @@ test('stylistic rules enforce the shared formatting policy', async () => {
 	assert.ok(actualRuleIds.has('@stylistic/brace-style'));
 	assert.ok(actualRuleIds.has('@stylistic/no-trailing-spaces'));
 	assert.ok(actualRuleIds.has('@stylistic/max-len'));
+
+	const braceStyleRule = stylistic.find((config) => config.rules?.['@stylistic/brace-style'])
+		.rules['@stylistic/brace-style'];
+	assert.deepEqual(braceStyleRule, ['error', 'stroustrup', {
+		allowSingleLine: false,
+	}]);
 });
 
 test('TypeScript is parsed without consumer project settings', async () => {
