@@ -23,6 +23,18 @@ export const base = [
 				}
 			}
 		}
+	},
+	{
+		name: '@stark/eslint-config/base-policy',
+		files: SOURCE_FILES,
+		rules: {
+			'no-extra-boolean-cast': 'error',
+			'no-inline-comments': ['error', { ignorePattern: 'eslint-disable' }],
+			'no-negated-condition': 'error',
+			'no-console': ['warn', { allow: ['warn', 'error'] }],
+			'no-var': 'error',
+			'prefer-const': 'error'
+		}
 	}
 ];
 

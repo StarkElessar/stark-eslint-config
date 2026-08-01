@@ -51,6 +51,17 @@ test('leaves application-specific configuration to consumers', () => {
 	}
 });
 
+test('base policy is shared with consumers', () => {
+	const rules = Object.assign({}, ...base.map((config) => config.rules ?? {}));
+
+	assert.equal(rules['no-extra-boolean-cast'], 'error');
+	assert.deepEqual(rules['no-console'], ['warn', { allow: ['warn', 'error'] }]);
+	assert.deepEqual(rules['no-inline-comments'], ['error', { ignorePattern: 'eslint-disable' }]);
+	assert.equal(rules['no-negated-condition'], 'error');
+	assert.equal(rules['no-var'], 'error');
+	assert.equal(rules['prefer-const'], 'error');
+});
+
 test('the complete config loads and accepts valid JavaScript', async () => {
 	const messages = await lint(
 		[
