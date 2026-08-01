@@ -67,7 +67,8 @@ export default [
 `base` enables the ESLint-recommended rules for all four language families.
 `typescript` adds the syntax-only `typescript-eslint` recommended rules for TS
 and TSX. `stylistic` applies the shared formatting policy to all four language
-families. `typeChecked` contains the shared type-aware TypeScript policy and
+families. `typeChecked` includes the official `typescript-eslint`
+`strictTypeChecked` preset plus the shared type-aware TypeScript policy. It
 must be applied after the consumer configures `projectService` or a project
 path. `imports` applies shared import/export ordering and recognizes
 alias-independent `shared`, `entities`, `features`, `widgets`, and `pages|views`
