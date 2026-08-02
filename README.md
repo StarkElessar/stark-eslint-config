@@ -121,3 +121,6 @@ ESLint Stylistic is the sole owner of JS/TS/JSX/TSX formatting:
 npm install
 npm run check
 ```
+
+See [RELEASING.md](RELEASING.md) for the versioning, tagging, and consumer
+update workflow.
